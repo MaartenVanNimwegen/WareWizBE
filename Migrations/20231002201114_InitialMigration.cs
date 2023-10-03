@@ -26,9 +26,10 @@ namespace WareWiz.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Phone = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Address = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: true)
+                    StudentNumber = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Password = table.Column<string>(type: "longtext", nullable: false)
+                    UserType = table.Column<int>(type: "int", maxLength: 1, nullable: false),
+                    Password = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>

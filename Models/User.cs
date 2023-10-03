@@ -19,10 +19,18 @@ namespace WareWiz.Models
         public string Phone { get; set; }
 
         [StringLength(maximumLength: 250)]
-        public string? Address { get; set; }
+        public string? StudentNumber { get; set; }
+
+        [Required(ErrorMessage = "Usertype is required.")]
+        public UserType userType { get; set; }
 
         [Required(ErrorMessage = "Password field is required.")]
-        public string Password { get; set; }
+        public string? Password { get; set; }
 
+    }
+    public enum UserType
+    {
+        Teacher,
+        Student
     }
 }   

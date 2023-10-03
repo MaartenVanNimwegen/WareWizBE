@@ -15,7 +15,6 @@ namespace WareWiz.Migrations
             migrationBuilder.AlterDatabase()
                 .Annotation("MySql:CharSet", "utf8mb4");
 
-            // Create BorrowedItems table
             migrationBuilder.CreateTable(
                 name: "BorrowedItems",
                 columns: table => new
@@ -34,30 +33,6 @@ namespace WareWiz.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
-            // Create Items table
-            migrationBuilder.CreateTable(
-                name: "Items",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Description = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    PhotoLocation = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    WarehouseId = table.Column<int>(type: "int", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    LastModifiedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Items", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            // Create Locations table
             migrationBuilder.CreateTable(
                 name: "Locations",
                 columns: table => new
@@ -75,7 +50,6 @@ namespace WareWiz.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
-            // Create Users table
             migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
@@ -102,7 +76,6 @@ namespace WareWiz.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
-            // Create Warehouse table
             migrationBuilder.CreateTable(
                 name: "Warehouses",
                 columns: table => new
@@ -118,8 +91,47 @@ namespace WareWiz.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Warehouses", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Warehouses_Locations_LocationId",
+                        column: x => x.LocationId,
+                        principalTable: "Locations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Items",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Description = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    PhotoLocation = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    WarehouseId = table.Column<int>(type: "int", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    LastModifiedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Items", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Items_Warehouses_WarehouseId",
+                        column: x => x.WarehouseId,
+                        principalTable: "Warehouses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Items_WarehouseId",
+                table: "Items",
+                column: "WarehouseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_Email",
@@ -127,19 +139,10 @@ namespace WareWiz.Migrations
                 column: "Email",
                 unique: true);
 
-            migrationBuilder.AddForeignKey(
-               name: "FK_Warehouse_Location",
-               table: "warehouses",
-               column: "LocationId",
-               principalTable: "locations",
-               principalColumn: "Id");
-
-            migrationBuilder.AddForeignKey(
-               name: "FK_Item_Warehouse",
-               table: "items",
-               column: "WarehouseId",
-               principalTable: "warehouses",
-               principalColumn: "Id");
+            migrationBuilder.CreateIndex(
+                name: "IX_Warehouses_LocationId",
+                table: "Warehouses",
+                column: "LocationId");
 
             migrationBuilder.AddForeignKey(
                name: "FK_BorrowedItems_Items",
@@ -166,13 +169,13 @@ namespace WareWiz.Migrations
                 name: "Items");
 
             migrationBuilder.DropTable(
-                name: "Locations");
-
-            migrationBuilder.DropTable(
                 name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Warehouses");
+
+            migrationBuilder.DropTable(
+                name: "Locations");
         }
     }
 }

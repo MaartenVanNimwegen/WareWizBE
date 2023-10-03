@@ -75,6 +75,8 @@ namespace WareWiz.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("WarehouseId");
+
                     b.ToTable("Items");
                 });
 
@@ -166,7 +168,37 @@ namespace WareWiz.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("LocationId");
+
                     b.ToTable("Warehouses");
+                });
+
+            modelBuilder.Entity("WareWiz.Models.Item", b =>
+                {
+                    b.HasOne("WareWiz.Models.Warehouse", null)
+                        .WithMany("Items")
+                        .HasForeignKey("WarehouseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("WareWiz.Models.Warehouse", b =>
+                {
+                    b.HasOne("WareWiz.Models.Location", null)
+                        .WithMany("Warehouses")
+                        .HasForeignKey("LocationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("WareWiz.Models.Location", b =>
+                {
+                    b.Navigation("Warehouses");
+                });
+
+            modelBuilder.Entity("WareWiz.Models.Warehouse", b =>
+                {
+                    b.Navigation("Items");
                 });
 #pragma warning restore 612, 618
         }

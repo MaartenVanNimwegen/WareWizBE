@@ -128,7 +128,7 @@ namespace WareWiz.Controllers
         }
 
         [HttpDelete]
-        public IActionResult Delete([Required] int id)
+        public async Task<IActionResult> Delete([Required] int id)
         {
             try
             {
@@ -138,7 +138,7 @@ namespace WareWiz.Controllers
                     return BadRequest(ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
                 }
 
-                var user = _dbContext.Users.Find(id);
+                var user = await _dbContext.Users.FindAsync(id);
                 if (user == null)
                 {
                     _logger.LogWarning($"No user found with the given id: {id}");
@@ -147,7 +147,7 @@ namespace WareWiz.Controllers
                 else
                 {
                     _dbContext.Users.Remove(user);
-                    _dbContext.SaveChanges();
+                    await _dbContext.SaveChangesAsync();
                     _logger.LogInformation($"User deleted successfully with ID: {id}");
                     return NoContent();
                 }

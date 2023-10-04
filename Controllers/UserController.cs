@@ -1,12 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WareWiz.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly ApplicationDBContext _dbContext;

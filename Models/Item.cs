@@ -27,5 +27,14 @@
 
         public DateTime LastModifiedDate { get; set; }
 
+
+        public ItemStatus Status { get; set; }
+
+    }
+
+    public enum ItemStatus
+    {
+        Avalible,
+        Borrowed
     }
 }

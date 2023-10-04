@@ -16,13 +16,13 @@ namespace WareWiz.Models
         public int LocationId { get; set; }
 
         
-        public DateTime CreatedDate { get; set; }
-
-        
-        public DateTime LastModifiedDate { get; set; }
-
-
         public ICollection<Item> Items { get; } = new List<Item>();
 
+
+        public DateTime CreatedDate { get; set; }
+
+
+        public DateTime LastModifiedDate { get; set; }
+        
     }
 }

@@ -1,7 +1,7 @@
 namespace WareWiz.Models
 {
-    [Index(nameof(Email), IsUnique = true)]
-    public class User
+    [Index(nameof(StudentNumber), IsUnique = true)]
+    public class Borrower
     {
         public int Id { get; set; }
 
@@ -16,8 +16,14 @@ namespace WareWiz.Models
         public string Email { get; set; }
 
 
-        [Required(ErrorMessage = "Password field is required.")]
-        public string Password { get; set; }
+        [Required(ErrorMessage = "Phone field is required.")]
+        [StringLength(maximumLength: 15, MinimumLength = 10)]
+        public string Phone { get; set; }
+
+
+        [Required(ErrorMessage = "Studentnumber field is required.")]
+        [StringLength(maximumLength: 250)]
+        public string StudentNumber { get; set; }
 
 
         public DateTime CreatedDate { get; set; }

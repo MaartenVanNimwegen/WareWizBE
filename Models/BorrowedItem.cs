@@ -9,8 +9,8 @@
         public int ItemId { get; set; }
 
 
-        [Required(ErrorMessage = "UserId field is required.")]
-        public int UserId { get; set; }
+        [Required(ErrorMessage = "BorrowerId field is required.")]
+        public int BorrowerId { get; set; }
 
 
         [Required(ErrorMessage = "BorrowedDate field is required.")]
@@ -22,14 +22,18 @@
 
 
         [Required(ErrorMessage = "Status field is required.")]
-        public Status Status { get; set; }
+        public BorrowedItemStatus Status { get; set; }
+
+        public DateTime CreatedDate { get; set; }
+
+
+        public DateTime LastModifiedDate { get; set; }
 
     }
 
-    public enum Status
+    public enum BorrowedItemStatus
     {
         Borrowed,
-        Returned,
-        Overdue
+        Returned
     }
 }

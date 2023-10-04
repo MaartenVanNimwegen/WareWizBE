@@ -18,5 +18,11 @@ namespace WareWiz.Models
 
 
         public ICollection<Warehouse> Warehouses { get; } = new List<Warehouse>();
+
+
+        public DateTime CreatedDate { get; set; }
+
+
+        public DateTime LastModifiedDate { get; set; }
     }
 }

@@ -62,9 +62,6 @@ namespace WareWiz.Controllers
                 {
                     Name = formUser.Name,
                     Email = formUser.Email,
-                    Phone = formUser.Phone,
-                    StudentNumber = formUser.StudentNumber,
-                    UserType = formUser.UserType,
                     Password = formUser.Password
                 };
 
@@ -109,9 +106,6 @@ namespace WareWiz.Controllers
 
                 user.Name = formUser.Name;
                 user.Email = formUser.Email;
-                user.Phone = formUser.Phone;
-                user.StudentNumber = formUser.StudentNumber;
-                user.UserType = formUser.UserType;
                 user.Password = formUser.Password;
 
                 try

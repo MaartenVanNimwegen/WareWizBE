@@ -22,14 +22,39 @@ namespace WareWiz.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     ItemId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false),
+                    BorrowerId = table.Column<int>(type: "int", nullable: false),
                     BorrowedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     ReturnDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false)
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    LastModifiedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_BorrowedItems", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Borrowers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Email = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Phone = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    StudentNumber = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CreatedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    LastModifiedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Borrowers", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -42,7 +67,9 @@ namespace WareWiz.Migrations
                     Name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Address = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CreatedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    LastModifiedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -60,12 +87,7 @@ namespace WareWiz.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Email = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Password = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    UserType = table.Column<int>(type: "int", nullable: false),
-                    Phone = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    StudentNumber = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: true)
+                    Password = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     CreatedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     LastModifiedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false)
@@ -114,7 +136,8 @@ namespace WareWiz.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     WarehouseId = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    LastModifiedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                    LastModifiedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -127,6 +150,12 @@ namespace WareWiz.Migrations
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Borrowers_StudentNumber",
+                table: "Borrowers",
+                column: "StudentNumber",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Items_WarehouseId",
@@ -149,14 +178,16 @@ namespace WareWiz.Migrations
                table: "borroweditems",
                column: "ItemId",
                principalTable: "items",
-               principalColumn: "Id");
+               principalColumn: "Id",
+               onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
                name: "FK_BorrowedItems_Users",
-               table: "borrowedItems",
-               column: "UserId",
-               principalTable: "users",
-               principalColumn: "Id");
+               table: "borroweditems",
+               column: "BorrowerId",
+               principalTable: "borrowers",
+               principalColumn: "Id",
+               onDelete: ReferentialAction.Cascade);
         }
 
         /// <inheritdoc />
@@ -164,6 +195,9 @@ namespace WareWiz.Migrations
         {
             migrationBuilder.DropTable(
                 name: "BorrowedItems");
+
+            migrationBuilder.DropTable(
+                name: "Borrowers");
 
             migrationBuilder.DropTable(
                 name: "Items");

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using WareWiz.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,9 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
 
+builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<AuthenticateService>();
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -21,9 +25,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = "localhost",
-            ValidAudience = "localhost",
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("test"))
+            ValidIssuer = "WareWiz",
+            ValidAudience = "WareWiz",
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("ThisIsMyKey!@12345"))
         };
     });
 

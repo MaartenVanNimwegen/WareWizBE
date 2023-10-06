@@ -1,20 +1,26 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using WareWiz.Models;
+using WareWiz.Services;
 
 namespace WareWiz.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/v1/[controller]")]
     [Authorize]
     public class UserController : ControllerBase
     {
         private readonly ApplicationDBContext _dbContext;
         private readonly ILogger<UserController> _logger;
+        private readonly UserService _userService;
+        private readonly AuthenticateService _authenticateService;
 
-        public UserController(ApplicationDBContext dbContext, ILogger<UserController> logger)
+        public UserController(ApplicationDBContext dbContext, ILogger<UserController> logger, UserService userService, AuthenticateService authenticateService)
         {
             _dbContext = dbContext;
             _logger = logger;
+            _userService = userService;
+            _authenticateService = authenticateService;
         }
 
         [HttpGet]
@@ -47,46 +53,28 @@ namespace WareWiz.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] User formUser)
+        public async Task<IActionResult> Post([FromBody] User user)
         {
-            try
+            if (user == null)
             {
-                if (!ModelState.IsValid)
-                {
-                    _logger.LogWarning("Invalid model state during user creation");
-                    return BadRequest(ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
-                }
-
-                var user = new User
-                {
-                    Name = formUser.Name,
-                    Email = formUser.Email,
-                    Password = formUser.Password
-                };
-
-                _dbContext.Users.Add(user);
-
-                try
-                {
-                    await _dbContext.SaveChangesAsync();
-                    _logger.LogInformation($"User added successfully with ID: {user.Id}");
-                    return Ok(user);
-                }
-                catch (DbUpdateException ex)
-                {
-                    _logger.LogError($"Error saving changes: {ex.Message}");
-                    return BadRequest("Error saving changes. Please try again or contact support.");
-                }
+                return BadRequest("Invalid user data");
             }
-            catch (Exception ex)
+
+            if (!await _userService.IsEmailAvailable(user.Email))
             {
-                _logger.LogError($"Error creating user: {ex.Message}");
-                return StatusCode(500, "Internal server error");
+                return BadRequest("Email is already in use");
             }
+
+            if (await _authenticateService.RegisterUser(user))
+            {
+                return Ok("User registered successfully");
+            }
+
+            return StatusCode(500, "An error occurred");
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put(int id, [FromBody] User formUser)
+        public async Task<IActionResult> Put(int id, string name, string email)
         {
             try
             {
@@ -103,9 +91,8 @@ namespace WareWiz.Controllers
                     return NotFound("No user found with the given id");
                 }
 
-                user.Name = formUser.Name;
-                user.Email = formUser.Email;
-                user.Password = formUser.Password;
+                user.Name = name;
+                user.Email = email;
 
                 try
                 {

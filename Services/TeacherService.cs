@@ -2,16 +2,11 @@
 {
     public class TeacherService
     {
-        private readonly List<Teacher> _teachers = new List<Teacher>();
-
         private readonly ApplicationDBContext _dbContext;
-        private readonly ILogger<TeacherService> _logger;
 
-
-        public TeacherService(ApplicationDBContext dbContext, ILogger<TeacherService> logger)
+        public TeacherService(ApplicationDBContext dbContext)
         {
             _dbContext = dbContext;
-            _logger = logger;
         }
 
         public async Task<bool> IsEmailAvailable(string email)

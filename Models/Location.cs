@@ -12,9 +12,7 @@ namespace WareWiz.Models
         public string Name { get; set; }
 
 
-        [Required(ErrorMessage = "Address field is required.")]
-        [StringLength(maximumLength: 100, MinimumLength = 5)]
-        public string Address { get; set; }
+        public Address Address { get; set; }
 
 
         public List<Warehouse> Warehouses { get; set; }

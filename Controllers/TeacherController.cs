@@ -8,7 +8,7 @@ namespace WareWiz.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    [Authorize]
+    //[Authorize]
     public class TeacherController : ControllerBase
     {
         private readonly ApplicationDBContext _dbContext;
@@ -30,7 +30,14 @@ namespace WareWiz.Controllers
             var teacher = await _dbContext.Teachers.FindAsync(id);
             if (teacher != null)
             {
-                return Ok(teacher);
+                var teacherViewModel = new TeacherViewModel();
+                teacherViewModel.Id = teacher.Id;
+                teacherViewModel.Name = teacher.Name;
+                teacherViewModel.EmailAddress = teacher.EmailAddress;
+                teacherViewModel.Phone = teacher.Phone;
+                teacherViewModel.CreatedDate = teacher.CreatedDate;
+                teacherViewModel.LastModifiedDate = teacher.LastModifiedDate;
+                return Ok(teacherViewModel);
             }
             else
             {
@@ -56,7 +63,7 @@ namespace WareWiz.Controllers
 
                         if(await _authenticateService.RegisterTeacher(teacher))
                         {
-                            return Ok("teacher registered successfully");
+                            return Ok("Teacher registered successfully");
                         }
                         else
                         {
@@ -73,14 +80,24 @@ namespace WareWiz.Controllers
 
         [HttpPut]
         [Route("{id:int}/changePassword")]
-        public async Task<IActionResult> ChangePassword([FromBody][Required] PasswordViewModel passwords, [FromQuery] int id)
+        public async Task<IActionResult> ChangePassword([FromBody][Required] ChangePasswordViewModel passwords, int id)
         {
             var teacher = await _dbContext.Teachers.FindAsync(id);
             if (teacher != null)
             {
-                return Ok(teacher);
+                if (passwords.NewPassword == passwords.ConfirmNewPassword)
+                {
+                    if (AuthenticateService.VerifyPassword(passwords.OldPassword, teacher.Password))
+                    {
+                        teacher.Password = passwords.NewPassword;
+                        await _authenticateService.ChangePassword(teacher);
+                        return Ok();
+                    }
+                    return BadRequest("Incorrect password!");
+                }
+                return BadRequest("The given passwords are not the same!");
             }
-            return BadRequest("No teacher found with the given id");
+            return BadRequest("No teacher found with the given id!");
         }
 
         [HttpDelete]

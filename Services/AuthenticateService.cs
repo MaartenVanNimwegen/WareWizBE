@@ -93,5 +93,25 @@ namespace WareWiz.Services
             return false;
         }
 
+        public async Task<bool> ChangePassword(Teacher teacher)
+        {
+            if (teacher != null)
+            {
+                try
+                {
+                    teacher.Password = HashPassword(teacher.Password);
+                    await _dbContext.SaveChangesAsync();
+
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    return false;
+                }
+            }
+
+            return false;
+        }
+
     }
 }

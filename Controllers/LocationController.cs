@@ -39,8 +39,8 @@ namespace WareWiz.Controllers
             }
             else
             {
-                _logger.LogWarning($"No teacher found with the given id: {id}");
-                return NotFound("No teacher found with the given id");
+                _logger.LogWarning($"No location found with the given id: {id}");
+                return NotFound("No location found with the given id");
             }
         }
 
@@ -57,14 +57,14 @@ namespace WareWiz.Controllers
 
                 if (await _locationService.AddLocationAsync(location))
                 {
-                    return Ok("Teacher registered successfully");
+                    return Ok("Location registered successfully");
                 }
                 else
                 {
-                    return StatusCode(500, "Something went wrong saving the teacher!");
+                    return StatusCode(500, "Something went wrong saving the location!");
                 }
             }
-            return BadRequest("Invalid teacher data");
+            return BadRequest("Invalid location data");
         }
 
         [HttpDelete]

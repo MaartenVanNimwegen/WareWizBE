@@ -11,7 +11,7 @@ using WareWiz.Data;
 namespace WareWiz.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20231011194046_InitialMigration")]
+    [Migration("20231011195915_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />

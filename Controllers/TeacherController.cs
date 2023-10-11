@@ -60,8 +60,10 @@ namespace WareWiz.Controllers
                         teacher.EmailAddress = givenTeacher.EmailAddress;
                         teacher.Phone = givenTeacher.Phone;
                         teacher.Password = givenTeacher.Password;
+                        teacher.CreatedDate = DateTime.UtcNow;
+                        teacher.LastModifiedDate = DateTime.UtcNow;
 
-                        if(await _authenticateService.RegisterTeacher(teacher))
+                        if (await _authenticateService.RegisterTeacher(teacher))
                         {
                             return Ok("Teacher registered successfully");
                         }
@@ -90,6 +92,7 @@ namespace WareWiz.Controllers
                     if (AuthenticateService.VerifyPassword(passwords.OldPassword, teacher.Password))
                     {
                         teacher.Password = passwords.NewPassword;
+                        teacher.LastModifiedDate = DateTime.UtcNow;
                         await _authenticateService.ChangePassword(teacher);
                         return Ok();
                     }

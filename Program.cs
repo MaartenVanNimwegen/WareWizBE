@@ -13,7 +13,7 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
 
-builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<TeacherService>();
 builder.Services.AddScoped<AuthenticateService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

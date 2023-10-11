@@ -6,17 +6,17 @@ namespace WareWiz.Services
     {
         private readonly ApplicationDBContext _dbContext;
         private readonly ILogger<AuthenticateService> _logger;
-        private readonly UserService _userService;
+        private readonly TeacherService _teacherService;
 
         private const int Iterations = 10000;
         private const int SaltSize = 32;
         private const int HashSize = 32;
 
-        public AuthenticateService(ApplicationDBContext dbContext, ILogger<AuthenticateService> logger, UserService userService)
+        public AuthenticateService(ApplicationDBContext dbContext, ILogger<AuthenticateService> logger, TeacherService teacherService)
         {
             _dbContext = dbContext;
             _logger = logger;
-            _userService = userService;
+            _teacherService = teacherService;
         }
 
         public static string HashPassword(string password)
@@ -70,16 +70,16 @@ namespace WareWiz.Services
             }
         }
 
-        public async Task<bool> RegisterUser(User user)
+        public async Task<bool> RegisterTeacher(Teacher teacher)
         {
-            if (user != null)
+            if (teacher != null)
             {
                 try
                 {
-                    var hashedPassword = HashPassword(user.Password);
-                    user.Password = hashedPassword;
+                    var hashedPassword = HashPassword(teacher.Password);
+                    teacher.Password = hashedPassword;
 
-                    await _dbContext.Users.AddAsync(user);
+                    await _dbContext.Teachers.AddAsync(teacher);
                     await _dbContext.SaveChangesAsync();
 
                     return true;

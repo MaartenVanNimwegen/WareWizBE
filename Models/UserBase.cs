@@ -1,23 +1,25 @@
-namespace WareWiz.Models
+﻿namespace WareWiz.Models
 {
-    [Index(nameof(Email), IsUnique = true)]
-    public class User
+    [Index(nameof(EmailAddress), IsUnique = true)]
+    public class UserBase
     {
         public int Id { get; set; }
 
+        
         [Required(ErrorMessage = "Name field is required.")]
         [StringLength(maximumLength: 100, MinimumLength = 2)]
         public string Name { get; set; }
 
 
-        [Required(ErrorMessage = "Email field is required.")]
+        [Required(ErrorMessage = "Emailaddress field is required.")]
         [StringLength(maximumLength: 100, MinimumLength = 2)]
         [EmailAddress]
-        public string Email { get; set; }
+        public string EmailAddress { get; set; }
 
 
-        [Required(ErrorMessage = "Password field is required.")]
-        public string Password { get; set; }
+        [Required(ErrorMessage = "Phone field is required.")]
+        [StringLength(maximumLength: 15, MinimumLength = 10)]
+        public string Phone { get; set; }
 
 
         public DateTime CreatedDate { get; set; }
@@ -26,4 +28,4 @@ namespace WareWiz.Models
         public DateTime LastModifiedDate { get; set; }
 
     }
-}   
+}

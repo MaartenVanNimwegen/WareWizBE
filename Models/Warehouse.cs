@@ -12,11 +12,13 @@ namespace WareWiz.Models
         public string Name { get; set; }
 
 
-        [Required(ErrorMessage = "LocationId field is required.")]
         public int LocationId { get; set; }
 
+
+        public Location Location { get; set; }
+
         
-        public ICollection<Item> Items { get; } = new List<Item>();
+        public List<Item> Items { get; set; }
 
 
         public DateTime CreatedDate { get; set; }

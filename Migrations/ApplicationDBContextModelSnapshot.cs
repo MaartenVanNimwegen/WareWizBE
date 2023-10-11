@@ -60,7 +60,7 @@ namespace WareWiz.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("Email")
+                    b.Property<string>("EmailAddress")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
@@ -84,6 +84,9 @@ namespace WareWiz.Migrations
                         .HasColumnType("varchar(250)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EmailAddress")
+                        .IsUnique();
 
                     b.HasIndex("StudentNumber")
                         .IsUnique();
@@ -156,7 +159,7 @@ namespace WareWiz.Migrations
                     b.ToTable("Locations");
                 });
 
-            modelBuilder.Entity("WareWiz.Models.User", b =>
+            modelBuilder.Entity("WareWiz.Models.Teacher", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -165,7 +168,7 @@ namespace WareWiz.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("Email")
+                    b.Property<string>("EmailAddress")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
@@ -182,12 +185,17 @@ namespace WareWiz.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("varchar(15)");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("Email")
+                    b.HasIndex("EmailAddress")
                         .IsUnique();
 
-                    b.ToTable("Users");
+                    b.ToTable("Teachers");
                 });
 
             modelBuilder.Entity("WareWiz.Models.Warehouse", b =>
@@ -219,20 +227,24 @@ namespace WareWiz.Migrations
 
             modelBuilder.Entity("WareWiz.Models.Item", b =>
                 {
-                    b.HasOne("WareWiz.Models.Warehouse", null)
+                    b.HasOne("WareWiz.Models.Warehouse", "Warehouse")
                         .WithMany("Items")
                         .HasForeignKey("WarehouseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Warehouse");
                 });
 
             modelBuilder.Entity("WareWiz.Models.Warehouse", b =>
                 {
-                    b.HasOne("WareWiz.Models.Location", null)
+                    b.HasOne("WareWiz.Models.Location", "Location")
                         .WithMany("Warehouses")
                         .HasForeignKey("LocationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Location");
                 });
 
             modelBuilder.Entity("WareWiz.Models.Location", b =>

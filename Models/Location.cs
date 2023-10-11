@@ -17,7 +17,7 @@ namespace WareWiz.Models
         public string Address { get; set; }
 
 
-        public ICollection<Warehouse> Warehouses { get; } = new List<Warehouse>();
+        public List<Warehouse> Warehouses { get; set; }
 
 
         public DateTime CreatedDate { get; set; }

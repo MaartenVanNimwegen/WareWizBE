@@ -18,8 +18,10 @@
         public string? PhotoLocation { get; set; }
 
 
-        [Required(ErrorMessage = "WarehouseId field is required.")]
         public int WarehouseId { get; set; }
+
+
+        public Warehouse Warehouse { get; set; }
 
 
         public DateTime CreatedDate { get; set; }

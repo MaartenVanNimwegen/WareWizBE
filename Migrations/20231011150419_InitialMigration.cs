@@ -41,16 +41,16 @@ namespace WareWiz.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Email = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Phone = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
                     StudentNumber = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     CreatedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    LastModifiedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                    LastModifiedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    EmailAddress = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Phone = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
@@ -78,23 +78,25 @@ namespace WareWiz.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Users",
+                name: "Teachers",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Password = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Email = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                    EmailAddress = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Password = table.Column<string>(type: "longtext", nullable: false)
+                    Phone = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     CreatedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     LastModifiedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.PrimaryKey("PK_Teachers", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -152,6 +154,12 @@ namespace WareWiz.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Borrowers_EmailAddress",
+                table: "Borrowers",
+                column: "EmailAddress",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Borrowers_StudentNumber",
                 table: "Borrowers",
                 column: "StudentNumber",
@@ -163,31 +171,15 @@ namespace WareWiz.Migrations
                 column: "WarehouseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_Email",
-                table: "Users",
-                column: "Email",
+                name: "IX_Teachers_EmailAddress",
+                table: "Teachers",
+                column: "EmailAddress",
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Warehouses_LocationId",
                 table: "Warehouses",
                 column: "LocationId");
-
-            migrationBuilder.AddForeignKey(
-               name: "FK_BorrowedItems_Items",
-               table: "borroweditems",
-               column: "ItemId",
-               principalTable: "items",
-               principalColumn: "Id",
-               onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-               name: "FK_BorrowedItems_Users",
-               table: "borroweditems",
-               column: "BorrowerId",
-               principalTable: "borrowers",
-               principalColumn: "Id",
-               onDelete: ReferentialAction.Cascade);
         }
 
         /// <inheritdoc />
@@ -203,7 +195,7 @@ namespace WareWiz.Migrations
                 name: "Items");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Teachers");
 
             migrationBuilder.DropTable(
                 name: "Warehouses");

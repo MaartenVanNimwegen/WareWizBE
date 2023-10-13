@@ -1,6 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using WareWiz.Models;
 using WareWiz.Services;
 using WareWiz.ViewModels;
 
@@ -42,7 +40,12 @@ namespace WareWiz.Controllers
         [Route("{id}")]
         public async Task<IActionResult> GetLocationById([Required]int id)
         {
-            var location = await _dbContext.Locations.FindAsync(id);
+            var location = await _dbContext.Locations
+                .Where(l => l.Id == id)
+                .Include (l => l.Warehouses)
+                .Include(l => l.Address)
+                .FirstOrDefaultAsync();
+
             if (location != null)
             {
                 var locationViewModel = new LocationViewModel();

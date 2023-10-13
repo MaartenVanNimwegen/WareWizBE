@@ -23,17 +23,17 @@ namespace WareWiz.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllLocations()
         {
+            var locationsToReturn = new List<LocationViewModel>();
             var locations = await _dbContext.Locations
-                .Include(l => l.Warehouses)
                 .Include(l => l.Address)
                 .ToListAsync();
 
-            if (locations.Count() == 0 || locations == null)
+            foreach (var location in locations)
             {
-                return NotFound("No locations found.");
+                var locationViewModel= new LocationViewModel { Id = location.Id, Name = location.Name, Address = location.Address, CreatedDate = location.CreatedDate, LastModifiedDate = location.LastModifiedDate };
+                locationsToReturn.Add(locationViewModel);
             }
-
-            return Ok(locations);
+            return Ok(locationsToReturn);
         }
 
         [HttpGet]
@@ -77,7 +77,7 @@ namespace WareWiz.Controllers
 
                 if (await _locationService.AddLocationAsync(location))
                 {
-                    return Ok("Location registered successfully");
+                    return Ok("Location added successfully");
                 }
                 else
                 {

@@ -14,9 +14,6 @@ namespace WareWiz.Models
 
         public int LocationId { get; set; }
 
-
-        public Location Location { get; set; }
-
         
         public List<Item> Items { get; set; }
 

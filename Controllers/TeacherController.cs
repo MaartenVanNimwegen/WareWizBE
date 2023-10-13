@@ -25,6 +25,7 @@ namespace WareWiz.Controllers
         }
 
         [HttpGet]
+        [Route("{id}")]
         public async Task<IActionResult> GetTeacherById([Required]int id)
         {
             var teacher = await _dbContext.Teachers.FindAsync(id);

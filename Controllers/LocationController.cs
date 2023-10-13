@@ -23,6 +23,23 @@ namespace WareWiz.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> GetAllLocations()
+        {
+            var locations = await _dbContext.Locations
+                .Include(l => l.Warehouses)
+                .Include(l => l.Address)
+                .ToListAsync();
+
+            if (locations.Count() == 0 || locations == null)
+            {
+                return NotFound("No locations found.");
+            }
+
+            return Ok(locations);
+        }
+
+        [HttpGet]
+        [Route("{id}")]
         public async Task<IActionResult> GetLocationById([Required]int id)
         {
             var location = await _dbContext.Locations.FindAsync(id);

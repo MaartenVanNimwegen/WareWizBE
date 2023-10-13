@@ -23,6 +23,7 @@ namespace WareWiz.Controllers
         }
 
         [HttpGet]
+        [Route("{id}")]
         public async Task<IActionResult> GetWarehouseById([Required]int id)
         {
             var warehouse = await _dbContext.Warehouses.FindAsync(id);

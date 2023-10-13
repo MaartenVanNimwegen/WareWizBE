@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
-using WareWiz.Services;
-using WareWiz.ViewModels;
+
 
 namespace WareWiz.Controllers
 {

@@ -11,6 +11,9 @@
         public Address Address { get; set; }
 
 
+        public List<Warehouse> Warehouses { get; set; }
+
+
         public DateTime CreatedDate { get; set; }
 
 

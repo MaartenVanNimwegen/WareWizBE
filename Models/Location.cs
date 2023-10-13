@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Hosting;
-
-namespace WareWiz.Models
+﻿namespace WareWiz.Models
 {
     public class Location
     {

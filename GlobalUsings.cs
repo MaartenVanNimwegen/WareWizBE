@@ -3,3 +3,4 @@ global using System.ComponentModel.DataAnnotations.Schema;
 global using Microsoft.EntityFrameworkCore;
 global using WareWiz.Models;
 global using WareWiz.Data;
+global using Microsoft.AspNetCore.Mvc;

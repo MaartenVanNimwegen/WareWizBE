@@ -1,6 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using WareWiz.Models;
 using WareWiz.Services;
 using WareWiz.ViewModels;
 
@@ -43,6 +41,23 @@ namespace WareWiz.Controllers
                 _logger.LogWarning($"No warehouse found with the given id: {id}");
                 return NotFound("No warehouse found with the given id");
             }
+        }
+
+        [HttpGet]
+        [Route("location/{id}")]
+        public async Task<IActionResult> GetWarehousesByLocationId([Required] int id)
+        {
+            var warehousesToReturn = new List<WarehouseViewModel>();
+            var warehouses = await _dbContext.Warehouses
+                .Where(w => w.LocationId == id)
+                .ToListAsync();
+
+            foreach (var warehouse in warehouses)
+            {
+                var warehouseViewModel = new WarehouseViewModel { Id = warehouse.Id, Name = warehouse.Name, LocationId = warehouse.LocationId, CreatedDate = warehouse.CreatedDate, LastModifiedDate = warehouse.LastModifiedDate };
+                warehousesToReturn.Add(warehouseViewModel);
+            }
+            return Ok(warehousesToReturn);
         }
 
         [HttpPost]

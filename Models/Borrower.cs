@@ -7,11 +7,5 @@ namespace WareWiz.Models
         [StringLength(maximumLength: 250)]
         public string StudentNumber { get; set; }
 
-
-        public DateTime CreatedDate { get; set; }
-
-
-        public DateTime LastModifiedDate { get; set; }
-
     }
 }   

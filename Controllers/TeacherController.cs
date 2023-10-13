@@ -8,7 +8,7 @@ namespace WareWiz.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    [Authorize]
+    //[Authorize]
     public class TeacherController : ControllerBase
     {
         private readonly ApplicationDBContext _dbContext;

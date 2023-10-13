@@ -73,7 +73,7 @@ namespace WareWiz.Controllers
 
                 if (await _warehouseService.AddWarehouseAsync(warehouse))
                 {
-                    return Ok("Warehouse registered successfully");
+                    return Ok("Warehouse added successfully");
                 }
                 else
                 {

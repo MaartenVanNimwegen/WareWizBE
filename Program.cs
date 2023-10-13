@@ -17,6 +17,7 @@ builder.Services.AddScoped<TeacherService>();
 builder.Services.AddScoped<AuthenticateService>();
 builder.Services.AddScoped<LocationService>();
 builder.Services.AddScoped<WarehouseService>();
+builder.Services.AddScoped<ItemService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

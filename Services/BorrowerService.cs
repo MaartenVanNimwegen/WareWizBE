@@ -15,11 +15,7 @@
             _dbContext.Borrowers.Add(borrower);
             await _dbContext.SaveChangesAsync();
 
-            var addedBorrower = _dbContext.Borrowers
-                .Where(b => b.StudentNumber == borrower.StudentNumber && b.EmailAddress == borrower.EmailAddress)
-                .FirstOrDefaultAsync();
-
-            return addedBorrower.Id;
+            return borrower.Id;
         }
 
         public async Task<Borrower> GetBorrowerByStudentNumberOrEmailAsync(string studentNumber, string email)

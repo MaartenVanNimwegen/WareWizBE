@@ -161,7 +161,10 @@ namespace WareWiz.Controllers
         [Route("return")]
         public async Task<IActionResult> ReturnItem(int itemId)
         {
-            _itemService.ReturnItemAsync(itemId);
+            if (await _itemService.ReturnItemAsync(itemId)) {
+                return Ok($"The item with id: {itemId} was returned.");
+            }
+            return BadRequest($"An error accured returning item with id:{itemId}");
         }
     }
 }

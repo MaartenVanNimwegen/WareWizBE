@@ -1,4 +1,6 @@
-﻿namespace WareWiz.Services
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace WareWiz.Services
 {
     public class ItemService
     {
@@ -74,6 +76,50 @@
             await _dbContext.SaveChangesAsync();
 
             return borrowedItem;
+        }
+
+        public async Task<bool> ReturnItemAsync(int itemId)
+        {
+            var updatedItemStatus = await UpdateItemStatusAsync(itemId, ItemStatus.Avalible);
+            var updatedBorrowedItemStatus = await UpdateBorrowedItemStatus(itemId, BorrowedItemStatus.Returned);
+
+            if (updatedItemStatus == true && updatedBorrowedItemStatus == true)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public async Task<bool> UpdateItemStatusAsync(int itemId, ItemStatus newStatus)
+        {
+            var item = await _dbContext.Items.FindAsync(itemId);
+
+            if (item == null)
+            {
+                return false;
+            }
+
+            item.Status = newStatus;
+            await _dbContext.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<bool> UpdateBorrowedItemStatus(int itemId, BorrowedItemStatus newStatus)
+        {
+            var borrowedItem = await _dbContext.BorrowedItems
+                .Where(i => i.ItemId == itemId)
+                .FirstOrDefaultAsync();
+
+            if (borrowedItem == null)
+            {
+                return false;
+            }
+
+            borrowedItem.Status = newStatus;
+            await _dbContext.SaveChangesAsync();
+
+            return true;
         }
     }
 }

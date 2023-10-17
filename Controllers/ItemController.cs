@@ -158,13 +158,13 @@ namespace WareWiz.Controllers
         }
 
         [HttpPost]
-        [Route("return")]
-        public async Task<IActionResult> ReturnItem(int itemId)
+        [Route("return/{id}")]
+        public async Task<IActionResult> ReturnItem([Required]int id)
         {
-            if (await _itemService.ReturnItemAsync(itemId)) {
-                return Ok($"The item with id: {itemId} was returned.");
+            if (await _itemService.ReturnItemAsync(id)) {
+                return Ok($"The item with id: {id} was returned.");
             }
-            return BadRequest($"An error accured returning item with id:{itemId}");
+            return BadRequest($"An error accured returning item with id: {id}");
         }
     }
 }

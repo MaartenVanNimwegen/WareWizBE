@@ -162,8 +162,10 @@ namespace WareWiz.Controllers
         public async Task<IActionResult> ReturnItem([Required]int id)
         {
             if (await _itemService.ReturnItemAsync(id)) {
+                _logger.LogInformation($"Item with id: {id} was succesfully returned.");
                 return Ok($"The item with id: {id} was returned.");
             }
+            _logger.LogWarning($"Item with id: {id} could not be returned");
             return BadRequest($"An error accured returning item with id: {id}");
         }
     }

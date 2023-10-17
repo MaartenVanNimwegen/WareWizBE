@@ -1,7 +1,4 @@
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
-using WareWiz.Models;
 
 
 namespace WareWiz.Controllers
@@ -129,72 +126,42 @@ namespace WareWiz.Controllers
         [Route("borrow")]
         public async Task<IActionResult> BorrowItem(int itemId, DateTime returnDate, BorrowerViewModel givenBorrower)
         {
-            var item = await _dbContext.Items.FirstOrDefaultAsync(i => i.Id == itemId);
-
-            if (item == null)
+            try
             {
-                return BadRequest("No item with the given id was found.");
-            }
-
-            var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
-
-            var isAvailable = await _dbContext.Items.AnyAsync(i => i.Id == itemId && i.Status == 0);
-
-            if (!isAvailable)
-            {
-                return BadRequest("This item is not available to borrow.");
-            }
-
-            var existingBorrower = await _borrowerService.GetBorrowerByStudentNumberOrEmailAsync(givenBorrower.StudentNumber, givenBorrower.EmailAddress);
-
-            if (existingBorrower == null)
-            {
-                var borrower = new Borrower
+                if (string.IsNullOrEmpty(givenBorrower.StudentNumber) || string.IsNullOrEmpty(givenBorrower.EmailAddress))
                 {
-                    Name = givenBorrower.Name,
-                    EmailAddress = givenBorrower.EmailAddress,
-                    Phone = givenBorrower.Phone,
-                    StudentNumber = givenBorrower.StudentNumber,
-                    CreatedDate = DateTime.UtcNow,
-                    LastModifiedDate = DateTime.UtcNow
-                };
+                    return BadRequest("Student number and email address are required.");
+                }
 
-                var borrowerId = await _borrowerService.AddBorrowerAsync(borrower);
+                var item = await _dbContext.Items.FirstOrDefaultAsync(i => i.Id == itemId);
 
-                var borrowedItem = new BorrowedItem
+                if (item == null)
                 {
-                    ItemId = itemId,
-                    BorrowerId = borrowerId,
-                    BorrowedDate = DateTime.UtcNow,
-                    ReturnDate = returnDate,
-                    Status = 0,
-                    CreatedDate = DateTime.UtcNow,
-                    LastModifiedDate = DateTime.UtcNow,
-                };
+                    return BadRequest("No item with the given id was found.");
+                }
 
-                _dbContext.BorrowedItems.Add(borrowedItem);
-                item.Status = ItemStatus.Borrowed;
-                await _dbContext.SaveChangesAsync();
+                var isAvailable = await _dbContext.Items.AnyAsync(i => i.Id == itemId && i.Status == 0);
+
+                if (!isAvailable)
+                {
+                    return BadRequest("This item is not available to borrow.");
+                }
+
+                var borrowedItem = await _itemService.BorrowItemAsync(itemId, returnDate, givenBorrower);
+
                 return Ok(borrowedItem);
             }
-            else
+            catch (Exception ex)
             {
-                var borrowedItem = new BorrowedItem
-                {
-                    ItemId = itemId,
-                    BorrowerId = existingBorrower.Id,
-                    BorrowedDate = DateTime.UtcNow,
-                    ReturnDate = returnDate,
-                    Status = 0,
-                    CreatedDate = DateTime.UtcNow,
-                    LastModifiedDate = DateTime.UtcNow,
-                };
-
-                _dbContext.BorrowedItems.Add(borrowedItem);
-                item.Status = ItemStatus.Borrowed;
-                await _dbContext.SaveChangesAsync();
-                return Ok(borrowedItem);
+                return StatusCode(500, "An error occurred while processing the request.");
             }
+        }
+
+        [HttpPost]
+        [Route("return")]
+        public async Task<IActionResult> ReturnItem(int itemId)
+        {
+            _itemService.ReturnItemAsync(itemId);
         }
     }
 }

@@ -84,7 +84,7 @@ namespace WareWiz.Services
 
                     return true;
                 }
-                catch (Exception ex)
+                catch
                 {
                     return false;
                 }
@@ -104,7 +104,7 @@ namespace WareWiz.Services
 
                     return true;
                 }
-                catch (Exception ex)
+                catch
                 {
                     return false;
                 }

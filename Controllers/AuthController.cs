@@ -23,7 +23,7 @@ namespace WareWiz.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel loginViewModel)
         {
             try

@@ -14,6 +14,8 @@
         [StringLength(maximumLength: 250, MinimumLength = 10)]
         public string Description { get; set; }
 
+        public string? serialNumber { get; set; }
+
 
         public string? PhotoLocation { get; set; }
 

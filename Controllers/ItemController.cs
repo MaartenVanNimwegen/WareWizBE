@@ -32,6 +32,7 @@ namespace WareWiz.Controllers
                 itemViewModel.Id = item.Id;
                 itemViewModel.Name = item.Name;
                 itemViewModel.Description = item.Description;
+                itemViewModel.serialNumber = item.serialNumber;
                 itemViewModel.PhotoLocation = item.PhotoLocation;
                 itemViewModel.WarehouseId = item.WarehouseId;
                 itemViewModel.CreatedDate = item.CreatedDate;
@@ -58,7 +59,7 @@ namespace WareWiz.Controllers
 
             foreach (var item in items)
             {
-                var itemViewModel = new ItemViewModel { Id = item.Id, Name = item.Name, Description = item.Description, PhotoLocation = item.PhotoLocation, WarehouseId = item.WarehouseId, Status = item.Status, CreatedDate = item.CreatedDate, LastModifiedDate = item.LastModifiedDate };
+                var itemViewModel = new ItemViewModel { Id = item.Id, Name = item.Name, Description = item.Description, serialNumber = item.serialNumber, PhotoLocation = item.PhotoLocation, WarehouseId = item.WarehouseId, Status = item.Status, CreatedDate = item.CreatedDate, LastModifiedDate = item.LastModifiedDate };
                 itemsToReturn.Add(itemViewModel);
             }
             return Ok(itemsToReturn);
@@ -72,6 +73,7 @@ namespace WareWiz.Controllers
                 var item = new Item();
                 item.Name = givenItem.Name;
                 item.Description = givenItem.Description;
+                item.serialNumber = givenItem.serialNumber;
                 item.PhotoLocation = givenItem.PhotoLocation;
                 item.WarehouseId = givenItem.WarehouseId;
                 item.Status = givenItem.Status;

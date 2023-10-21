@@ -57,9 +57,9 @@ namespace WareWiz.Controllers
                             claims: claims,
                             signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature)
                         );
-
+                        var teacherViewModel = new TeacherViewModel { Id = teacher.Id, Name = teacher.Name, EmailAddress = teacher.EmailAddress, Phone = teacher.Phone, jwtToken = new JwtSecurityTokenHandler().WriteToken(token), CreatedDate = teacher.CreatedDate, LastModifiedDate = teacher.LastModifiedDate };
                         _logger.LogInformation($"Teacher {loginViewModel.EmailAddress} successfully authenticated.");
-                        return Ok(new JwtSecurityTokenHandler().WriteToken(token));
+                        return Ok(teacherViewModel);
                     }
                     else
                     {

@@ -80,7 +80,7 @@ namespace WareWiz.Services
 
         public async Task<bool> ReturnItemAsync(int itemId)
         {
-            var updatedItemStatus = await UpdateItemStatusAsync(itemId, ItemStatus.Avalible);
+            var updatedItemStatus = await UpdateItemStatusAsync(itemId, ItemStatus.Available);
             var updatedBorrowedItemStatus = await UpdateBorrowedItemStatus(itemId, BorrowedItemStatus.Returned);
 
             if (updatedItemStatus == true && updatedBorrowedItemStatus == true)

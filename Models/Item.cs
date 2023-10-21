@@ -35,7 +35,7 @@
 
     public enum ItemStatus
     {
-        Avalible,
+        Available,
         Borrowed
     }
 }

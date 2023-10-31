@@ -159,7 +159,7 @@ namespace WareWiz.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("return/{id}")]
         public async Task<IActionResult> ReturnItem([Required]int id)
         {

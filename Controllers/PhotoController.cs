@@ -49,7 +49,7 @@ namespace WareWiz.Controllers
                 return NotFound("File not found");
 
             var fileBytes = System.IO.File.ReadAllBytes(fullPath);
-            return File(fileBytes, "image/jpeg"); // You can adjust the content type based on your file type
+            return File(fileBytes, "image/jpeg");
         }
     }
 }

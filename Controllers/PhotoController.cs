@@ -6,7 +6,6 @@ namespace WareWiz.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    [Authorize]
     public class PhotoController : ControllerBase
     {
         private readonly ApplicationDBContext _dbContext;
@@ -19,6 +18,7 @@ namespace WareWiz.Controllers
         }
 
         [HttpPost("upload")]
+        [Authorize]
         public async Task<IActionResult> Upload([FromForm] IFormFile file)
         {
             if (file == null || file.Length == 0)
